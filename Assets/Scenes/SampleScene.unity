@@ -514,7 +514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 997749771}
   - component: {fileID: 997749770}
-  - component: {fileID: 997749769}
+  - component: {fileID: 997749775}
   - component: {fileID: 997749773}
   - component: {fileID: 997749774}
   m_Layer: 3
@@ -524,24 +524,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &997749769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997749768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67825688687e4544990b352746a422e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 997749774}
-  jumpStrength: 2500
-  jumped: 0
-  velocity: {x: 2, y: 2}
-  position: {x: 0, y: 0}
-  speed: 16
 --- !u!212 &997749770
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -656,6 +638,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &997749775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997749768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93ff37f3615f3048a415e667df5b117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpStrength: 5000
+  jumped: 0
+  velocity: {x: 2, y: 2}
+  position: {x: 0, y: 0}
+  speed: 16
 --- !u!1 &1005638900
 GameObject:
   m_ObjectHideFlags: 0
