@@ -25,7 +25,7 @@ public class Movement : MonoBehaviour
   void UpdateControls()
   {
     // Enes (the goat's code)
-    rb.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
+    rb.AddForce(Vector2.right * speed);
 
     if (Input.GetAxisRaw("Jump") != 0 && !jumped)
     {
@@ -43,6 +43,7 @@ public class Movement : MonoBehaviour
 
     if(coll.gameObject.tag == "Wall") {
       speed *= -1;
+      rb.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
     }
   }
 }
