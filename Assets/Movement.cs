@@ -10,6 +10,8 @@ public class Movement : MonoBehaviour
   public Vector2 velocity = new Vector2(2, 2);
   public Vector2 position = new Vector2(0, 0);
 
+  public float speed = 16f; 
+
   void Start()
   {
 
@@ -22,7 +24,10 @@ public class Movement : MonoBehaviour
 
   void UpdateControls()
   {
-    if (Input.GetAxisRaw("Jump") != 0 && jumped == false)
+    // Enes (the goat's code)
+    rb.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
+
+    if (Input.GetAxisRaw("Jump") != 0 && !jumped)
     {
       Debug.Log(Input.GetAxisRaw("Jump") == 1);
       rb.AddForce(new Vector2(0, jumpStrength));
@@ -32,6 +37,12 @@ public class Movement : MonoBehaviour
 
   void OnCollisionEnter2D(Collision2D coll)
   {
-    jumped = false;
+    if(coll.gameObject.tag == "Ground") {
+      jumped = false;
+    }
+
+    if(coll.gameObject.tag == "Wall") {
+      speed *= -1;
+    }
   }
 }
