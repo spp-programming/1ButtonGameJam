@@ -25,7 +25,7 @@ public class Movement : MonoBehaviour
     if (Input.GetAxisRaw("Jump") != 0 && jumped == false)
     {
       Debug.Log(Input.GetAxisRaw("Jump") == 1);
-      rb.AddForce(Vector2.up * jumpStrength);
+      rb.AddForce(new Vector2(0, jumpStrength));
       jumped = true;
     }
   }
