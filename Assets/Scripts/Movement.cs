@@ -20,7 +20,8 @@ public class Movement : MonoBehaviour
     private float coyoteTimeCounter;
     bool isCoyoteTimeOver;
 
-    private bool grounded = false;
+    // Static and Public because it is needed for the FireBall.cs 
+    static public bool grounded = false;
     [Space(10)]
     public float speed;
     public BoxCollider2D rightCheck;
@@ -50,7 +51,7 @@ public class Movement : MonoBehaviour
         rb.velocity = new Vector2(speed, rb.velocity.y);
 
         //Check if groundCheck collider is triggered
-        Debug.Log(rb.velocity.y);
+        // Debug.Log(rb.velocity.y);
         if (groundCheck.IsTouchingLayers() && rb.velocity.y <= 0)
         {
             grounded = true;
@@ -62,6 +63,8 @@ public class Movement : MonoBehaviour
             speed *= -1;
             rb.AddForce(new Vector2(speed, rb.velocity.y), ForceMode2D.Impulse);
             UpdateSprite();
+            // Using this line of code instead of old one for FirePoint to rotate as well
+            transform.Rotate(0f, 180f, 0);
         }
 
         if (Input.GetButtonDown("Jump") && (grounded || coyoteTimeCounter > 0))
@@ -103,6 +106,6 @@ public class Movement : MonoBehaviour
         }
 
         // Mirror the sprite on the y if its movement doesnt match it's sprite direction
-        transform.localScale = new Vector3(localScaleX * Mathf.Sign(speed), transform.localScale.y, transform.localScale.z);
+        // transform.localScale = new Vector3(localScaleX * Mathf.Sign(speed), transform.localScale.y, transform.localScale.z);
     }
 }
