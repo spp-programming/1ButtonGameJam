@@ -22,6 +22,7 @@ public class Movement : MonoBehaviour
 
     // Static and Public because it is needed for the FireBall.cs 
     static public bool grounded = false;
+    static public bool spellReady = false;
     [Space(10)]
     public float speed;
     public BoxCollider2D rightCheck;
@@ -55,6 +56,7 @@ public class Movement : MonoBehaviour
         if (groundCheck.IsTouchingLayers() && rb.velocity.y <= 0)
         {
             grounded = true;
+            spellReady = false;
         }
 
         //Check if rightCheck collider is triggered
@@ -73,10 +75,12 @@ public class Movement : MonoBehaviour
             grounded = false;
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0) {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpCutHeight);
+            spellReady = true;
+        }
 
-        if (groundCheck.IsTouchingLayers())
+        if (groundCheck.IsTouchingLayers() && rb.velocity.y <= 0)
         {
             coyoteTimeCounter = CoyoteTime;
             isCoyoteTimeOver = false;

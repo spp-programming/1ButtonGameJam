@@ -12,7 +12,7 @@ public class SpellCasting : MonoBehaviour
     void Update()
     {
         // Confirm that we can shoot
-        if (Input.GetButtonUp("Fire1") && !Movement.grounded && shootCounter == 0)
+        if (Input.GetButtonDown("Fire1") && Movement.spellReady && shootCounter == 0)
         {
             Shoot();
             shootCounter += 1;
