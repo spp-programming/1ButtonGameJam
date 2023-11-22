@@ -1,23 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
   private Rigidbody2D rb;
 
-  public float jumpStrength = 2500;
-  private bool jumped = false;
-  public float speed = 4.0f; 
+  public BoxCollider2D groundCheck;
+  public float jumpStrength;
+  private bool grounded = false;
+  public float speed; 
+  public BoxCollider2D rightCheck;
 
   public Sprite[] sprites = new Sprite[3];
   private SpriteRenderer spriteRenderer;
+  private float localScaleX;
 
   // Time it takes to cycle all the frames in seconds
   public float frameCycleTime = 2;
 
   void Start()
   {
+    localScaleX = transform.localScale.x;
     rb = GetComponent<Rigidbody2D>();
     spriteRenderer= GetComponent<SpriteRenderer>();
   }
@@ -31,12 +37,24 @@ public class Movement : MonoBehaviour
   void UpdateControls()
   {
     rb.velocity = new Vector2(speed, rb.velocity.y);
+    
+    //Check if groundCheck collider is triggered
+    Debug.Log(rb.velocity.y);
+    if(groundCheck.IsTouchingLayers() && rb.velocity.y <= 0) {
+      grounded = true;
+    }
 
-    if (Input.GetAxisRaw("Jump") != 0 && !jumped)
+    //Check if rightCheck collider is triggered
+    if(rightCheck.IsTouchingLayers()) {
+      speed *= -1;
+      rb.AddForce(new Vector2(speed, rb.velocity.y), ForceMode2D.Impulse);
+      UpdateSprite();
+    }
+
+    if (Input.GetAxisRaw("Jump") != 0 && grounded)
     {
-      Debug.Log(Input.GetAxisRaw("Jump") == 1);
-      rb.AddForce(new Vector2(0, jumpStrength));
-      jumped = true;
+      rb.AddForce(new Vector2(rb.velocity.x, jumpStrength), ForceMode2D.Impulse);
+      grounded = false;
     }
   }
 
@@ -49,22 +67,6 @@ public class Movement : MonoBehaviour
     }
 
     // Mirror the sprite on the y if its movement doesnt match it's sprite direction
-    if((rb.velocity.x > 0 && transform.localScale.x < 0) || (rb.velocity.x < 0 && transform.localScale.x > 0)) {
-      transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-    }
-  }
-
-  void OnCollisionEnter2D(Collision2D coll)
-  {
-    // If the player collides with a gmae object tagged "ground" let it jump again
-    if(coll.gameObject.tag == "Ground") {
-      jumped = false;
-    }
-
-    // Reverse the x speed if player collides witha wall and give it a push in the new direction
-    if(coll.gameObject.tag == "Wall") {
-      speed *= -1;
-      rb.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
-    }
+    transform.localScale = new Vector3(localScaleX * Mathf.Sign(speed), transform.localScale.y, transform.localScale.z);
   }
 }
