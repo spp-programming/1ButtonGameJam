@@ -6,67 +6,103 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-  private Rigidbody2D rb;
+    private Rigidbody2D rb;
 
-  public BoxCollider2D groundCheck;
-  public float jumpStrength;
-  private bool grounded = false;
-  public float speed; 
-  public BoxCollider2D rightCheck;
+    public BoxCollider2D groundCheck;
 
-  public Sprite[] sprites = new Sprite[3];
-  private SpriteRenderer spriteRenderer;
-  private float localScaleX;
+    [Header("Jump Mechanics")][Range(1, 50)]
+    public float jumpStrength;
+    [Range(0.5f, 1)]
+    public float jumpCutHeight;
 
-  // Time it takes to cycle all the frames in seconds
-  public float frameCycleTime = 2;
+    [Range(0.01f, 0.5f)]
+    public float CoyoteTime = 0.1f;
+    private float coyoteTimeCounter;
+    bool isCoyoteTimeOver;
 
-  void Start()
-  {
-    localScaleX = transform.localScale.x;
-    rb = GetComponent<Rigidbody2D>();
-    spriteRenderer= GetComponent<SpriteRenderer>();
-  }
+    private bool grounded = false;
+    [Space(10)]
+    public float speed;
+    public BoxCollider2D rightCheck;
 
-  void Update()
-  {
-    UpdateControls();
-    UpdateSprite();
-  }
+    public Sprite[] sprites = new Sprite[3];
+    private SpriteRenderer spriteRenderer;
+    private float localScaleX;
 
-  void UpdateControls()
-  {
-    rb.velocity = new Vector2(speed, rb.velocity.y);
-    
-    //Check if groundCheck collider is triggered
-    Debug.Log(rb.velocity.y);
-    if(groundCheck.IsTouchingLayers() && rb.velocity.y <= 0) {
-      grounded = true;
-    }
+    // Time it takes to cycle all the frames in seconds
+    public float frameCycleTime = 2;
 
-    //Check if rightCheck collider is triggered
-    if(rightCheck.IsTouchingLayers()) {
-      speed *= -1;
-      rb.AddForce(new Vector2(speed, rb.velocity.y), ForceMode2D.Impulse);
-      UpdateSprite();
-    }
-
-    if (Input.GetAxisRaw("Jump") != 0 && grounded)
+    void Start()
     {
-      rb.AddForce(new Vector2(rb.velocity.x, jumpStrength), ForceMode2D.Impulse);
-      grounded = false;
-    }
-  }
-
-  void UpdateSprite() {
-    // Cycles the index from 0 to the number of frames and repeats
-    float animationProgress = Time.realtimeSinceStartup % frameCycleTime / frameCycleTime;
-    int spriteIndex = (int) Mathf.Floor(animationProgress * sprites.Length);
-    if (rb.velocity.sqrMagnitude != 0) {
-      spriteRenderer.sprite = sprites[spriteIndex];
+        localScaleX = transform.localScale.x;
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Mirror the sprite on the y if its movement doesnt match it's sprite direction
-    transform.localScale = new Vector3(localScaleX * Mathf.Sign(speed), transform.localScale.y, transform.localScale.z);
-  }
+    void Update()
+    {
+        UpdateControls();
+        UpdateSprite();
+    }
+
+    void UpdateControls()
+    {
+        rb.velocity = new Vector2(speed, rb.velocity.y);
+
+        //Check if groundCheck collider is triggered
+        Debug.Log(rb.velocity.y);
+        if (groundCheck.IsTouchingLayers() && rb.velocity.y <= 0)
+        {
+            grounded = true;
+        }
+
+        //Check if rightCheck collider is triggered
+        if (rightCheck.IsTouchingLayers())
+        {
+            speed *= -1;
+            rb.AddForce(new Vector2(speed, rb.velocity.y), ForceMode2D.Impulse);
+            UpdateSprite();
+        }
+
+        if (Input.GetButtonDown("Jump") && (grounded || coyoteTimeCounter > 0))
+        {
+            Jump();
+            grounded = false;
+        }
+
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpCutHeight);
+
+        if (groundCheck.IsTouchingLayers())
+        {
+            coyoteTimeCounter = CoyoteTime;
+            isCoyoteTimeOver = false;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+            if (coyoteTimeCounter <= 0 && !isCoyoteTimeOver)
+                isCoyoteTimeOver = true;
+        }
+    }
+
+    void Jump(float velocity = 1)
+    {
+        rb.velocity += Vector2.up * (jumpStrength * velocity);
+        coyoteTimeCounter = 0;
+    }
+
+    void UpdateSprite()
+    {
+        // Cycles the index from 0 to the number of frames and repeats
+        float animationProgress = Time.realtimeSinceStartup % frameCycleTime / frameCycleTime;
+        int spriteIndex = (int)Mathf.Floor(animationProgress * sprites.Length);
+        if (rb.velocity.sqrMagnitude != 0)
+        {
+            spriteRenderer.sprite = sprites[spriteIndex];
+        }
+
+        // Mirror the sprite on the y if its movement doesnt match it's sprite direction
+        transform.localScale = new Vector3(localScaleX * Mathf.Sign(speed), transform.localScale.y, transform.localScale.z);
+    }
 }

@@ -1229,7 +1229,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundCheck: {fileID: 1875145226}
-  jumpStrength: 100
+  jumpStrength: 10
+  jumpCutHeight: 0.65
+  CoyoteTime: 0.1
   speed: 4
   rightCheck: {fileID: 98411067}
   sprites:
