@@ -8,6 +8,8 @@ public class Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
 
+    public LayerMask groundLayer;
+
     public BoxCollider2D groundCheck;
 
     [Header("Jump Mechanics")][Range(1, 50)]
@@ -25,6 +27,7 @@ public class Movement : MonoBehaviour
     static public bool spellReady = false;
     [Space(10)]
     public float speed;
+
     public BoxCollider2D rightCheck;
 
     public Sprite[] sprites = new Sprite[3];
@@ -33,6 +36,9 @@ public class Movement : MonoBehaviour
 
     // Time it takes to cycle all the frames in seconds
     public float frameCycleTime = 2;
+
+    [Space(10)] public Transform ObstacleCheck;
+    private bool isObstructed;
 
     void Start()
     {
@@ -45,6 +51,8 @@ public class Movement : MonoBehaviour
     {
         UpdateControls();
         UpdateSprite();
+
+        IsGrounded();
     }
 
     void UpdateControls()
@@ -53,14 +61,16 @@ public class Movement : MonoBehaviour
 
         //Check if groundCheck collider is triggered
         // Debug.Log(rb.velocity.y);
-        if (groundCheck.IsTouchingLayers() && rb.velocity.y <= 0)
+        if (IsGrounded() && rb.velocity.y <= 0)
         {
             grounded = true;
             spellReady = false;
         }
 
+        isObstructed = Physics2D.OverlapCircle(ObstacleCheck.position, 0.1f, groundLayer);
+
         //Check if rightCheck collider is triggered
-        if (rightCheck.IsTouchingLayers())
+        if (isObstructed)
         {
             speed *= -1;
             rb.AddForce(new Vector2(speed, rb.velocity.y), ForceMode2D.Impulse);
@@ -69,7 +79,7 @@ public class Movement : MonoBehaviour
             transform.Rotate(0f, 180f, 0);
         }
 
-        if (Input.GetButtonDown("Jump") && (grounded || coyoteTimeCounter > 0))
+        if (Input.GetButtonDown("Jump") && (IsGrounded() || coyoteTimeCounter > 0))
         {
             Jump();
             grounded = false;
@@ -80,7 +90,7 @@ public class Movement : MonoBehaviour
             spellReady = true;
         }
 
-        if (groundCheck.IsTouchingLayers() && rb.velocity.y <= 0)
+        if (IsGrounded() && rb.velocity.y <= 0)
         {
             coyoteTimeCounter = CoyoteTime;
             isCoyoteTimeOver = false;
@@ -92,6 +102,8 @@ public class Movement : MonoBehaviour
                 isCoyoteTimeOver = true;
         }
     }
+
+    private void OnDrawGizmos() => Gizmos.DrawWireSphere(ObstacleCheck.position, 0.1f);
 
     void Jump(float velocity = 1)
     {
@@ -111,5 +123,19 @@ public class Movement : MonoBehaviour
 
         // Mirror the sprite on the y if its movement doesnt match it's sprite direction
         // transform.localScale = new Vector3(localScaleX * Mathf.Sign(speed), transform.localScale.y, transform.localScale.z);
+    }
+
+    private bool IsGrounded()
+    {
+        float extraHeight = 0.25f;
+        RaycastHit2D hit2D = Physics2D.BoxCast(groundCheck.bounds.center, groundCheck.bounds.size - new Vector3(0.1f, 0, 0), 0f, Vector2.down, extraHeight, groundLayer);
+        Color rayColor = hit2D.collider != null ? Color.green : Color.red;
+
+        // Optional, Debug.DrawRay code can be deleted later
+        Debug.DrawRay(groundCheck.bounds.center + new Vector3(groundCheck.bounds.extents.x, 0), Vector2.down * (groundCheck.bounds.extents.y + extraHeight), rayColor);
+        Debug.DrawRay(groundCheck.bounds.center - new Vector3(groundCheck.bounds.extents.x, 0), Vector2.down * (groundCheck.bounds.extents.y + extraHeight), rayColor);
+        Debug.DrawRay(groundCheck.bounds.center - new Vector3(groundCheck.bounds.extents.x, groundCheck.bounds.extents.y + extraHeight), groundCheck.bounds.extents.x * 2 * Vector2.right, rayColor);
+
+        return hit2D.collider != null;
     }
 }
