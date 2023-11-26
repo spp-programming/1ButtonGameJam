@@ -1632,7 +1632,7 @@ TilemapCollider2D:
   m_GameObject: {fileID: 298691002}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a3037c23730aed146896077b9d9f850d, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -2474,6 +2474,7 @@ MonoBehaviour:
   enemyLayer: 8
   mana: {fileID: 5918619880377669964, guid: 668f356ab85dd454b984c248d3f6da28, type: 3}
   currentLevel: 1
+  UnlockedLevels: 1
 --- !u!4 &1438541505
 Transform:
   m_ObjectHideFlags: 0
