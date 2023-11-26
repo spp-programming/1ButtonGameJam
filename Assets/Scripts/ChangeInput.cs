@@ -52,7 +52,7 @@ public class ChangeInput : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             isIdle = true;
             idleTimer = 0;

@@ -33,6 +33,8 @@ public class LevelManager : MonoBehaviour
 
         if (PlayerPrefs.GetInt("UnlockedLevels") == 0)
             UnlockedLevels = 1;
+        else if (UnlockedLevels > 5 || PlayerPrefs.GetInt("UnlockedLevels") > 5)
+            UnlockedLevels = 5;
         else
             UnlockedLevels = PlayerPrefs.GetInt("UnlockedLevels");
     }

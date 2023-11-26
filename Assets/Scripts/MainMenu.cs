@@ -23,8 +23,7 @@ public class MainMenu : MonoBehaviour
             {
                 if (LevelManager.Instance.UnlockedLevels > 1)
                 {
-                    TitleScreen.SetActive(false);
-                    LevelSelectionScreen.SetActive(true);
+                    LevelManager.Instance.LoadNextLevel(LevelManager.Instance.UnlockedLevels);
                 }
                 else if (LevelManager.Instance.UnlockedLevels == 1)
                 {
