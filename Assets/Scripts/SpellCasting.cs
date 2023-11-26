@@ -29,6 +29,5 @@ public class SpellCasting : MonoBehaviour
     {
         // Shooting Logic
         Instantiate(fireBallPrefab, firePoint.position, firePoint.rotation);
-        
     }
 }
