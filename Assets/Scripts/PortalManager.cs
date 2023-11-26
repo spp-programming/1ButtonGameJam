@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PortalManager : MonoBehaviour
 {
+    private bool hasTransitioned = false;
+
     private SpriteRenderer spriteRenderer;
     private CapsuleCollider2D capsuleCollider;
-    public LevelManager levelManager;
 
     void Start() {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -18,10 +19,12 @@ public class PortalManager : MonoBehaviour
         capsuleCollider.enabled = true;
     }
 
-    void OnTriggerEnter2D(Collider2D coll) {
-        if(coll.gameObject.name == "Player") {
-            Debug.Log("Level Complete");
-            levelManager.LevelCompleteEvent();
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.gameObject.name == "Player" && !hasTransitioned)
+        {
+            LevelManager.Instance.LoadNextLevel(LevelManager.Instance.currentLevel + 1);
+            hasTransitioned = true;
         }
     }
 }

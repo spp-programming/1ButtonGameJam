@@ -1,18 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    public static LevelManager Instance;
+
+    public Animator transition;
+
     public PortalManager portalManager;
     public int manaCount = 0;
     public int manaLayer;
     private int collectedManaCount = 0;
-    private int currentLevel = 1;
+    [HideInInspector] public int currentLevel = 1;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
 
     void Start()
     {
         CountAllChildren();
+        currentLevel = SceneManager.GetActiveScene().buildIndex;
     }
 
     public void CollectEvent() { 
@@ -38,5 +50,19 @@ public class LevelManager : MonoBehaviour
             }
         }
         Debug.Log(manaCount);
+    }
+
+    public void LoadNextLevel(int index)
+    {
+        StartCoroutine(LoadLevel(index));
+    }
+
+    private IEnumerator LoadLevel(int index)
+    {
+        transition.SetTrigger("Start");
+
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadScene(index);
     }
 }
