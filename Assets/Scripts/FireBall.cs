@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FireBall : MonoBehaviour
@@ -32,16 +33,26 @@ public class FireBall : MonoBehaviour
         // transform.localScale = new Vector3(localScaleX * Mathf.Sign(speed), transform.localScale.y, transform.localScale.z);
     }
 
+    void OnCollisionEnter2D(Collision2D coll) {
+        switch(coll.gameObject.layer) {
+            case 8:
+                Debug.Log("Collided with enemy");
+                coll.gameObject.GetComponent<Enemy>().Die();
+                GameObject.Destroy(gameObject);
+                break;
+        }
+    }
+    
     private void OnTriggerEnter2D(Collider2D coll)
     {
         switch(coll.gameObject.layer) {
             case 6:
-                GameObject.Destroy(this);
+                GameObject.Destroy(gameObject);
                 break;
             case 8:
-                // int id = coll.gameObject.GetComponent<SpellTriggerManager>();
-                // LevelManager.Instance.SpellTrigger() 
-                GameObject.Destroy(this);
+                Debug.Log("Collided with enemy");
+                coll.gameObject.GetComponent<Enemy>().Die();
+                GameObject.Destroy(gameObject);
                 break;
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +14,7 @@ public class LevelManager : MonoBehaviour
     public int manaCount = 0;
     public int manaLayer;
     private int collectedManaCount = 0;
+    public GameObject mana;
     [HideInInspector] public int currentLevel = 1;
 
     private void Awake()
@@ -49,6 +51,11 @@ public class LevelManager : MonoBehaviour
                 manaCount++;
             }
         }
+    }
+
+    public void CreateMana(Vector3 pos) {
+        Instantiate(mana, pos, quaternion.identity, transform);
+        CountAllChildren();
     }
 
     public void LoadNextLevel(int index)
