@@ -25,7 +25,7 @@ public class MainMenu : MonoBehaviour
                 {
                     LevelManager.Instance.LoadNextLevel(LevelManager.Instance.UnlockedLevels);
                 }
-                else if (LevelManager.Instance.UnlockedLevels == 1)
+                else if (LevelManager.Instance.UnlockedLevels <= 1)
                 {
                     LevelManager.Instance.LoadNextLevel(1);
                 }
