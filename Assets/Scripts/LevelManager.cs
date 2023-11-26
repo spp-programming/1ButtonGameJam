@@ -18,6 +18,8 @@ public class LevelManager : MonoBehaviour
     public GameObject mana;
     [HideInInspector] public int currentLevel = 1;
 
+    [HideInInspector] public int UnlockedLevels = 1;
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,6 +30,11 @@ public class LevelManager : MonoBehaviour
     {
         CountAllChildren();
         currentLevel = SceneManager.GetActiveScene().buildIndex;
+
+        if (PlayerPrefs.GetInt("UnlockedLevels") == 0)
+            UnlockedLevels = 1;
+        else
+            UnlockedLevels = PlayerPrefs.GetInt("UnlockedLevels");
     }
 
     public void CollectEvent() { 
@@ -38,8 +45,8 @@ public class LevelManager : MonoBehaviour
     }
 
     public void LevelCompleteEvent() {
-        currentLevel++;
-        Debug.Log("Level complete, from level manager");
+        UnlockedLevels++;
+        PlayerPrefs.SetInt("UnlockedLevels", UnlockedLevels);
     }
 
     void CountAllChildren()

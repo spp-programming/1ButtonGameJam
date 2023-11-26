@@ -37,6 +37,7 @@ public class PortalManager : MonoBehaviour
     {
         if (coll.gameObject.name == "Player" && !hasTransitioned && spriteRenderer.enabled)
         {
+            LevelManager.Instance.LevelCompleteEvent();
             LevelManager.Instance.LoadNextLevel(LevelManager.Instance.currentLevel + 1);
             hasTransitioned = true;
         }
