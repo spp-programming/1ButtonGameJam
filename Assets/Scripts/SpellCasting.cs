@@ -8,10 +8,6 @@ public class SpellCasting : MonoBehaviour
     public GameObject fireBallPrefab;
     public int shootCounter = 0;
 
-    public float sizeIncreaseRate = 0.5f;
-
-    public float maxFireballSize = 5.0f;
-
     // Boolean flag to check if the fire button is held
     private bool isFireButtonDown = false;
 
@@ -19,9 +15,10 @@ public class SpellCasting : MonoBehaviour
     void Update()
     {
         // Confirm that we can shoot
-        if (Input.GetButtonDown("Fire1") && Movement.spellReady && shootCounter == 0)
+        if (Input.GetButtonUp("Fire1") && Movement.spellReady && shootCounter == 0)
         {
             shootCounter += 1;
+            Shoot();
         }
 
         // Check if the fire button is held
@@ -32,7 +29,7 @@ public class SpellCasting : MonoBehaviour
         }
     }
 
-    void Shoot(float fireballSize) {
+    void Shoot() {
         // Shooting Logic with a specified fireball size
         GameObject newFireball = Instantiate(fireBallPrefab, firePoint.position, firePoint.rotation);
     }

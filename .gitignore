@@ -12,6 +12,8 @@
 [Uu]ser[Ss]ettings
 # file on crash reports
 sysinfo.txt
+.vs
+Packages
 
 ###
 # VS/MD solution and project files
