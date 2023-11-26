@@ -1,24 +1,27 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ManaManager : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     private CapsuleCollider2D capsuleCollider;
+    private float frameCycleTime = 10;
+    private float randomOffset;
+
+    public Sprite[] sprites;
     public float rotationSpeed;
     
     void Start() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         capsuleCollider.isTrigger = true;
+
+        randomOffset = UnityEngine.Random.Range(0.0f, 10.0f);
     }
 
     void Update() {
-        transform.Rotate(new Vector3(0, 0, rotationSpeed * Time.deltaTime));
+        UpdateSprite();
     }
 
     void OnTriggerEnter2D (Collider2D coll)
@@ -29,4 +32,11 @@ public class ManaManager : MonoBehaviour
             capsuleCollider.enabled = false;
         }
 	}
+    
+    void UpdateSprite()
+    {
+        float animationProgress = (Time.realtimeSinceStartup + randomOffset) % frameCycleTime / frameCycleTime;
+        int spriteIndex = (int)Mathf.Floor(animationProgress * sprites.Length);
+        spriteRenderer.sprite = sprites[spriteIndex];
+    }
 }

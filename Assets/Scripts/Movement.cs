@@ -98,6 +98,8 @@ public class Movement : MonoBehaviour
             if (coyoteTimeCounter <= 0 && !isCoyoteTimeOver)
                 isCoyoteTimeOver = true;
         }
+
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, 16);
     }
 
     private void OnDrawGizmos() => Gizmos.DrawWireSphere(ObstacleCheck.position, 0.1f);

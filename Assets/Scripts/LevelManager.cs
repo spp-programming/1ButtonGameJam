@@ -49,7 +49,6 @@ public class LevelManager : MonoBehaviour
                 manaCount++;
             }
         }
-        Debug.Log(manaCount);
     }
 
     public void LoadNextLevel(int index)
