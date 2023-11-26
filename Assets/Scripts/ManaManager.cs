@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,7 +9,6 @@ public class ManaManager : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     private CapsuleCollider2D capsuleCollider;
-    private int id;
     public float rotationSpeed;
     
     void Start() {
@@ -17,11 +18,7 @@ public class ManaManager : MonoBehaviour
     }
 
     void Update() {
-        transform.Rotate(new Vector3(0, Time.deltaTime * rotationSpeed, 0));
-    }
-
-    public void SetID(int _id) {
-        id = _id;
+        transform.Rotate(new Vector3(0, 0, rotationSpeed * Time.deltaTime));
     }
 
     void OnTriggerEnter2D (Collider2D coll)
