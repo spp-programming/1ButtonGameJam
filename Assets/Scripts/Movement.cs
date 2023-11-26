@@ -99,7 +99,7 @@ public class Movement : MonoBehaviour
                 isCoyoteTimeOver = true;
         }
 
-        rb.velocity = Vector2.ClampMagnitude(rb.velocity, 16);
+        rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -16.0f, 16.0f), 0);
     }
 
     private void OnDrawGizmos() => Gizmos.DrawWireSphere(ObstacleCheck.position, 0.1f);

@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
     public PortalManager portalManager;
     public int manaCount = 0;
     public int manaLayer;
+    public int enemyLayer;
     private int collectedManaCount = 0;
     public GameObject mana;
     [HideInInspector] public int currentLevel = 1;
@@ -47,7 +48,7 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i < childObjects.Length; i++)
         {
             childObjects[i] = transform.GetChild(i).gameObject;
-            if(childObjects[i].layer == manaLayer) {
+            if(childObjects[i].layer == manaLayer || childObjects[i].layer == enemyLayer) {
                 manaCount++;
             }
         }
@@ -55,7 +56,6 @@ public class LevelManager : MonoBehaviour
 
     public void CreateMana(Vector3 pos) {
         Instantiate(mana, pos, quaternion.identity, transform);
-        CountAllChildren();
     }
 
     public void LoadNextLevel(int index)
